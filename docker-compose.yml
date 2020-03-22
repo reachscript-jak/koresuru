@@ -1,0 +1,14 @@
+version: '3'
+services:
+  front:
+    build: .
+    container_name: koresuru-front
+    volumes:
+      - .:/koresuru:cached
+      - node_modules:/koresuru/node_modules:cached
+    ports:
+      - '3003:3000'
+
+volumes:
+  node_modules:
+    driver: local

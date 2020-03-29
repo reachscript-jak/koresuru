@@ -1,10 +1,26 @@
 import React from 'react';
+import API, { graphqlOperation } from '@aws-amplify/api';
+import PubSub from '@aws-amplify/pubsub';
+
+import awsconfig from './aws-exports';
 import logo from './logo.svg';
 import './App.css';
+import { listTodos } from './graphql/queries';
+import { createTodo } from './graphql/mutations';
+
+API.configure(awsconfig);
+PubSub.configure(awsconfig);
 
 const App = () => {
-  const onClickGetData = () => alert('データ取得を押しました');
-  const onClickRegistData = () => alert('データ登録を押しました');
+  const onClickGetData = async () => {
+    const todos = await API.graphql(graphqlOperation(listTodos));
+    console.log(todos);
+  };
+  const onClickRegistData = async () => {
+    const todo = { name: 'じゃけぇの追加', description: 'ですくりぷしょん' };
+    await API.graphql(graphqlOperation(createTodo, { input: todo }));
+    alert('登録しました！');
+  };
   return (
     <div className="App">
       <header className="App-header">
